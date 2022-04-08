@@ -1,0 +1,6 @@
+UseTab: Always
+IndentWidth: 4
+TabWidth: 4
+AllowShortFunctionsOnASingleLine: None
+AlignAfterOpenBracket: AlwaysBreak
+# vim: ft=yaml

@@ -1,0 +1,8 @@
+configuration {
+	font: "Fira Code 12.6" ;
+    terminal: "alacritty";
+}
+
+@theme "./nord.rasi"
+
+element-icon { size: 1.9ch ; }
