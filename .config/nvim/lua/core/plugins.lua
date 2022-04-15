@@ -19,7 +19,10 @@ packer.startup{
         }
 
         use {
-            "echasnovski/mini.nvim", branch = 'stable'
+            "echasnovski/mini.nvim", branch = 'stable',
+            config = function()
+                require"plugins.mini"
+            end
         }
 
         use {
@@ -32,11 +35,6 @@ packer.startup{
         }
 
         use {
-            "windwp/nvim-autopairs",
-            config = function() require("nvim-autopairs").setup() end
-        }
-
-        use {
             "lukas-reineke/indent-blankline.nvim",
             config = function()
                 require("indent_blankline").setup {
@@ -44,11 +42,6 @@ packer.startup{
                     space_char_blankline = " ",
                 }
             end
-        }
-
-        use {
-            "numToStr/Comment.nvim",
-            config = function() require("Comment").setup() end
         }
 
         use {
@@ -135,6 +128,15 @@ packer.startup{
             "akinsho/bufferline.nvim",
             requires = {"kyazdani42/nvim-web-devicons"},
             config = function() require("plugins.bufferline") end,
+        }
+
+        use {
+            "folke/which-key.nvim",
+            config = function()
+                require("which-key").setup{
+
+                }
+            end
         }
 
         use {
