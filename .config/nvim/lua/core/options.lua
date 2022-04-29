@@ -2,11 +2,13 @@ local opt = vim.opt
 
 vim.cmd[[
     syntax enable
-    colorscheme tokyonight
+    colorscheme tokyonight 
 ]]
 
 opt.encoding = "utf-8"
 vim.g.did_load_filetypes = 1
+
+vim.notify = require("notify")
 
 opt.number = true
 opt.relativenumber = true

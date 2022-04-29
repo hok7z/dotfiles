@@ -1,3 +1,11 @@
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerSync 
+  augroup end
+]])
+
+
 local ok,packer = pcall(require,"packer")
 if not ok then
     return
@@ -6,17 +14,12 @@ end
 packer.startup{
     function(use)
 
-        use {
-            "wbthomason/packer.nvim"
-        }
+        use "wbthomason/packer.nvim"
 
-        use {
-	        "folke/tokyonight.nvim"
-	    }
+        use "folke/tokyonight.nvim"
+        use "navarasu/onedark.nvim"
 
-        use {
-            "nathom/filetype.nvim"
-        }
+        use "nathom/filetype.nvim"
 
         use {
             "echasnovski/mini.nvim", branch = 'stable',
@@ -25,9 +28,9 @@ packer.startup{
             end
         }
 
-        use {
-            "dstein64/vim-startuptime"
-        }
+        use "dstein64/vim-startuptime"
+
+        use "davidgranstrom/nvim-markdown-preview"
 
         use {
             "max397574/better-escape.nvim",
@@ -45,6 +48,17 @@ packer.startup{
         }
 
         use {
+            "ray-x/lsp_signature.nvim",
+            config = function()
+                local cfg = {
+                    hint_enable = false,
+                    verbose = true
+                }
+                require"lsp_signature".setup(cfg)
+            end
+        }
+
+        use {
             "lewis6991/gitsigns.nvim",
             config = function()
                 require("gitsigns").setup{
@@ -52,18 +66,18 @@ packer.startup{
                 }
             end
         }
-
+        
         use {
             "rcarriga/nvim-notify",
             config = function()
                 require("notify").setup{
+                    level = "info",
                     stages = "fade_in_slide_out",
 
                     on_open = nil,
                     on_close = nil,
 
                     render = "default",
-
                     timeout = 5000,
 
                     max_width = nil,
@@ -79,8 +93,17 @@ packer.startup{
                         INFO = "",
                         DEBUG = "",
                         TRACE = "✎",
-                    }
+                    },
                 }
+
+            end
+        }
+
+        use {
+            "folke/todo-comments.nvim",
+            requires = "nvim-lua/plenary.nvim",
+            config = function()
+                require("todo-comments").setup{}
             end
         }
 
@@ -125,9 +148,11 @@ packer.startup{
 
 
         use {
-            "akinsho/bufferline.nvim",
-            requires = {"kyazdani42/nvim-web-devicons"},
-            config = function() require("plugins.bufferline") end,
+            'romgrk/barbar.nvim',
+            requires = {'kyazdani42/nvim-web-devicons'},
+            config = function()
+                require("plugins.barbar")
+            end
         }
 
         use {
@@ -139,6 +164,7 @@ packer.startup{
             end
         }
 
+        -- Language Server Protocol
         use {
            "neovim/nvim-lspconfig",
            config = function() require("plugins.lspconfig") end
@@ -149,26 +175,24 @@ packer.startup{
         }
 
         use {
-            "hrsh7th/nvim-cmp",
-            requires = {
-               "onsails/lspkind-nvim",
-               "hrsh7th/cmp-nvim-lsp",
-               "saadparwaiz1/cmp_luasnip",
-            },
+            "onsails/lspkind-nvim",
             config = function()
                 require("lspkind").init{
                     mode = 'symbol_text',
-                    preset = 'codicons',
+                    preset = 'codicons'
                 }
-
-                require("plugins.cmp")
             end
         }
 
-
         use {
-            "jose-elias-alvarez/null-ls.nvim",
-            config = function() require("plugins.null-ls") end
+            "hrsh7th/nvim-cmp",
+            requires = {
+                "hrsh7th/cmp-nvim-lsp",
+                "saadparwaiz1/cmp_luasnip",
+            },
+            config = function()
+                require("plugins.cmp")
+            end
         }
 
         use {
@@ -176,10 +200,15 @@ packer.startup{
             requires = {
                 "rafamadriz/friendly-snippets",
             },
-
             config = function()
                 require("luasnip/loaders/from_vscode").lazy_load()
             end
+        }
+
+
+        use {
+            "jose-elias-alvarez/null-ls.nvim",
+            config = function() require("plugins.null-ls") end
         }
 
     end,

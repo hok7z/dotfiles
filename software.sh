@@ -11,9 +11,9 @@ sudo pacman -S xorg xorg-server xorg-xinit lxappearance papirus-icon-theme slim
 sudo pacman -S bspwm sxhkd
 
 sudo pacman -S polkit-gnome keepassxc neofetch nitrogen flameshot kitty bottom tmux qalc
-sudo pacman -S rofi rofi-qalc
+sudo pacman -S rofi libqalculate rofi-qalc
 
-sudo pacman -S neovim vim neovim-qt clang
+sudo pacman -S vim neovim neovim-qt
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
     ~/.local/share/nvim/site/pack/packer/start/packer.nvim 
 
@@ -27,7 +27,7 @@ sudo systemctl --now enable libvirtd
 sudo systemctl --now enable firewalld
 sudo sytemctl restart libvirtd
 
-sudo pacman -S clang npm
+sudo pacman -S clang npm xsel
 pip3 install aiogram peewee requests
 
 git clone https://aur.archlinux.org/paru.git 
@@ -35,6 +35,9 @@ cd paru
 makepkg -si
 cd 
 
+pip3 install black
+sudo npm i g neovim
+
 paru -S librewolf-bin freetube-bin timeshift-bin kotatogram-desktop-bin 
 paru -S polybar-git light-git picom-tryone-git betterlockscreen
-paru -S nerd-fonts-jetbrains-mono nordic-darker-theme  
+paru -S ttf-iosevka nordic-darker-theme  

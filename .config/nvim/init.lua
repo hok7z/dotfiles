@@ -1,7 +1,6 @@
 local core_modules = {
     "options",
     "mappings",
-    "autocmds",
     "plugins"
 }
 

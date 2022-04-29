@@ -1,6 +1,8 @@
 -- nvim-cmp setup
 local cmp = require 'cmp'
 
+
+
 cmp.setup {
     mapping = {
         ["<Tab>"]     = cmp.mapping.select_next_item(),
@@ -10,13 +12,19 @@ cmp.setup {
     },
 
     completion = {
-        autocomplete = true
+        autocomplete = true,
+        completeopt = "menu,menuone,noinsert",
     },
 
     snippet = {
         expand = function(args)
             require('luasnip').lsp_expand(args.body)
         end,
+    },
+
+    window = {
+        completion    = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered()
     },
 
     formatting = {
@@ -33,14 +41,7 @@ cmp.setup {
             return vim_item
         end
 
-        -- format = lspkind.cmp_format({
-        --     with_text = false, -- do not show text alongside icons
-        --     maxwidth = 50,
-        --     before = function (entry, vim_item)
-        --         return vim_item
-        --     end
-        -- })
-  },
+    },
 
   sources = {
     { name = 'nvim_lsp' },

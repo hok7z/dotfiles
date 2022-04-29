@@ -234,6 +234,30 @@ function M.log_time(fn, label)
   end
 end
 
+-- TODO: fix function
+function M.require_mod(modname)
+    local ok,mod = pcall(require,modname)
+    local notify_ok,notify = pcall(require,"notify")
+    if (not ok) then
+        local errmsg = "Failed to load " .. modname
+        if (notify_ok) then
+            notify(
+                errmsg,
+                "error",
+                {
+                    title = "require"
+                }
+            )
+        else
+            vim.notify(errmsg)
+        end
+
+        return
+    end
+
+    return mod
+end
+
 function M.index_of(t, v, eqfn)
   eqfn = eqfn or (function(el) return el == v end)
   for i, value in ipairs(t) do

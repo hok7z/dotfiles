@@ -70,6 +70,10 @@ require("mini.indentscope").setup{
     symbol = '╎',
 }
 
+require("mini.cursorword").setup{
+    delay = 100,
+}
+
 require("mini.surround").setup{
     -- Number of lines within which surrounding is searched
     n_lines = 20,
