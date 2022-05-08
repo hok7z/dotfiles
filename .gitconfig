@@ -1,3 +1,6 @@
 [user]
-	email = zxgn3526@tutanota.com
-	name = Mr.D
+    email = hok7zv@tutanota.com
+    name = hok7z
+[core]
+    editor = nvim
+    pager = less
