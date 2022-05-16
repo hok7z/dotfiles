@@ -1,46 +1,60 @@
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync 
-  augroup end
-]])
-
-
 local ok,packer = pcall(require,"packer")
 if not ok then
+    vim.notify("Failed to load packer\n\n")
     return
 end
 
+
+vim.api.nvim_create_autocmd("BufWritePost", {
+    pattern = "*/core/plugins.lua",
+    callback = function(arg)
+        vim.cmd("source "..arg.file)
+        vim.cmd("PackerInstall")
+    end,
+})
+
 packer.startup{
     function(use)
-
         use "wbthomason/packer.nvim"
 
         use "folke/tokyonight.nvim"
         use "navarasu/onedark.nvim"
 
         use "nathom/filetype.nvim"
-
-        use {
-            "echasnovski/mini.nvim", branch = 'stable',
-            config = function()
-                require"plugins.mini"
-            end
-        }
-
         use "dstein64/vim-startuptime"
-
-        use "davidgranstrom/nvim-markdown-preview"
 
         use {
             "max397574/better-escape.nvim",
-            config = function() require("better_escape").setup() end
+            config = function()
+                require("better_escape").setup()
+            end
+        }
+
+        use {
+            "numToStr/Comment.nvim",
+            config = function()
+                require('Comment').setup()
+            end
+        }
+
+        use {
+            "windwp/nvim-autopairs",
+            config = function()
+                require("nvim-autopairs").setup()
+            end
+        }
+
+        use {
+            "ur4ltz/surround.nvim",
+            config = function()
+                require"surround".setup{mappings_style = "sandwich"}
+            end
         }
 
         use {
             "lukas-reineke/indent-blankline.nvim",
             config = function()
-                require("indent_blankline").setup {
+                require("indent_blankline").setup{
                     show_end_of_line = true,
                     space_char_blankline = " ",
                 }
@@ -48,14 +62,7 @@ packer.startup{
         }
 
         use {
-            "ray-x/lsp_signature.nvim",
-            config = function()
-                local cfg = {
-                    hint_enable = false,
-                    verbose = true
-                }
-                require"lsp_signature".setup(cfg)
-            end
+            "RRethy/vim-illuminate"
         }
 
         use {
@@ -66,7 +73,49 @@ packer.startup{
                 }
             end
         }
-        
+
+        use {
+            "f-person/git-blame.nvim"
+        }
+
+        use {
+            "kyazdani42/nvim-tree.lua",
+            requires = { "kyazdani42/nvim-web-devicons" },
+            config = function() require("plugins.nvim-tree") end
+        }
+
+        use {
+            "davidgranstrom/nvim-markdown-preview"
+        }
+
+        use {
+            "folke/todo-comments.nvim",
+            requires = "nvim-lua/plenary.nvim",
+            config = function() require("todo-comments").setup() end
+        }
+
+        use {
+            "folke/which-key.nvim",
+            config = function() require("which-key").setup() end,
+        }
+
+        use {
+            "nvim-telescope/telescope.nvim",
+            requires = { "nvim-lua/plenary.nvim" },
+            config = function()
+                local actions = require('telescope.actions')
+                require('telescope').setup{
+                    defaults = {
+                        mappings = {
+                            n = {
+                                ["q"] = actions.close
+                            },
+                        },
+                    }
+                }
+            end
+        }
+
         use {
             "rcarriga/nvim-notify",
             config = function()
@@ -100,28 +149,16 @@ packer.startup{
         }
 
         use {
-            "folke/todo-comments.nvim",
-            requires = "nvim-lua/plenary.nvim",
-            config = function()
-                require("todo-comments").setup{}
-            end
+           "nvim-lualine/lualine.nvim",
+            requires = { 'kyazdani42/nvim-web-devicons',opt = true},
+            config = function() require("plugins.lualine") end
         }
 
+
         use {
-            "nvim-telescope/telescope.nvim",
-            requires = { "nvim-lua/plenary.nvim" },
-            config = function()
-                local actions = require('telescope.actions')
-                require('telescope').setup{
-                    defaults = {
-                        mappings = {
-                            n = {
-                                ["q"] = actions.close
-                            },
-                        },
-                    }
-                }
-            end
+            'romgrk/barbar.nvim',
+            requires = {'kyazdani42/nvim-web-devicons'},
+            config = function() require("plugins.barbar") end,
         }
 
         use {
@@ -134,44 +171,26 @@ packer.startup{
             config = function() require("plugins.treesitter") end
         }
 
-        use {
-            "kyazdani42/nvim-tree.lua",
-            requires = { "kyazdani42/nvim-web-devicons" },
-            config = function() require("plugins.nvim-tree") end
-        }
-
-        use {
-           "nvim-lualine/lualine.nvim",
-            requires = { 'kyazdani42/nvim-web-devicons',opt = true},
-            config = function() require("plugins.lualine") end
-        }
-
-
-        use {
-            'romgrk/barbar.nvim',
-            requires = {'kyazdani42/nvim-web-devicons'},
-            config = function()
-                require("plugins.barbar")
-            end
-        }
-
-        use {
-            "folke/which-key.nvim",
-            config = function()
-                require("which-key").setup{
-
-                }
-            end
-        }
 
         -- Language Server Protocol
         use {
            "neovim/nvim-lspconfig",
-           config = function() require("plugins.lspconfig") end
+           config = function() require("plugins.lsp") end
         }
 
         use {
             "williamboman/nvim-lsp-installer"
+        }
+
+        use {
+            "ray-x/lsp_signature.nvim",
+            config = function()
+                local cfg = {
+                    hint_enable = false,
+                    verbose = true
+                }
+                require"lsp_signature".setup(cfg)
+            end
         }
 
         use {
@@ -188,11 +207,14 @@ packer.startup{
             "hrsh7th/nvim-cmp",
             requires = {
                 "hrsh7th/cmp-nvim-lsp",
+                "hrsh7th/cmp-path",
+                "hrsh7th/cmp-buffer",
                 "saadparwaiz1/cmp_luasnip",
+                "hrsh7th/cmp-calc",
+                "hrsh7th/cmp-emoji",
+                "hrsh7th/cmp-cmdline",
             },
-            config = function()
-                require("plugins.cmp")
-            end
+            config = function() require("plugins.cmp") end,
         }
 
         use {
@@ -211,14 +233,28 @@ packer.startup{
             config = function() require("plugins.null-ls") end
         }
 
+        -- Debug Adapter Protocol
+        use {
+            "mfussenegger/nvim-dap",
+            requires = {
+                "arywz11/DAPInstall.nvim"
+            },
+            config = function() require("plugins.dap") end,
+        }
+
+        use {
+            "rcarriga/nvim-dap-ui"
+        }
+
+
     end,
+
     config = {
         display = {
             open_fn = function()
-                return require("packer.util").float { border = "rounded" }
+                return require("packer.util").float{border = "rounded"}
             end
-
-        }
+        },
     }
 }
 

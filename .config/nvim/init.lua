@@ -1,12 +1,12 @@
-local core_modules = {
+local core = {
     "options",
     "mappings",
     "plugins"
 }
 
-for _,source in ipairs(core_modules) do
+for _,source in ipairs(core) do
     local status_ok,fault = pcall(require,'core.' .. source)
     if not status_ok then
-        error("Failed to load " .. source .."\n\n" .. fault )
+        vim.notify("Failed to load " .. source .."\n\n" .. fault )
     end
 end

@@ -1,7 +1,12 @@
 -- nvim-cmp setup
-local cmp = require 'cmp'
 
+local ok,cmp = pcall(require,"cmp")
+if not ok then
+    vim.notify("Failed to load cmp\n\n")
+    return
+end
 
+local icons = {}
 
 cmp.setup {
     mapping = {
@@ -29,7 +34,6 @@ cmp.setup {
 
     formatting = {
         format = function(entry, vim_item)
-            local icons = require "plugins.lspkind_icons"
             vim_item.kind = string.format("%s %s", icons[vim_item.kind], vim_item.kind)
 
             vim_item.menu = ({
@@ -44,7 +48,9 @@ cmp.setup {
     },
 
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip'  },
+    { name = "nvim_lsp"},
+    { name = "luasnip" },
+    { name = "emoji"   },
+    { name = "calc"    },
   },
 }

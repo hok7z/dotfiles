@@ -1,4 +1,10 @@
-require'nvim-treesitter.configs'.setup {
+local ok,nvim_treesitter_configs = pcall(require,"nvim-treesitter.configs")
+if not ok then
+    vim.notify("Failed to load nvim-treesitter\n\n")
+    return
+end
+
+nvim_treesitter_configs.setup {
     highlight = {
         enable = true,
         disable = {},

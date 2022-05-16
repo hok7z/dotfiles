@@ -1,19 +1,18 @@
 local opt = vim.opt
 
-vim.cmd[[
-    syntax enable
-    colorscheme tokyonight 
-]]
+vim.cmd "colorscheme tokyonight"
 
 opt.encoding = "utf-8"
+opt.swapfile = false
 vim.g.did_load_filetypes = 1
 
-vim.notify = require("notify")
+local ok,notify = pcall(require,"notify")
+if ok then
+    vim.notify = notify
+end
 
 opt.number = true
 opt.relativenumber = true
-
-opt.swapfile = false
 
 opt.mouse = "a"
 opt.cursorline = true
