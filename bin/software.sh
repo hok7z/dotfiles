@@ -1,16 +1,17 @@
+#!/bin/bash
 # If user root
 if [ "$EUID" = 0 ];
 then 
-	echo "Please,start this script without root";
-	exit 1
+    echo "Please,start this script without root";
+    exit 1
 fi
 
-cd ~
+cd ~ 
 mkdir ~/Pictures ~/Documents ~/bin
 
 # Software
 sudo pacman -S kitty tmux bottom flameshot keepassxc gnupg nitrogen pulseaudio polkit-gnome
-sudo pacman -S rofi xsel neofetch libqalculate
+sudo pacman -S rofi rofi-calc xsel neofetch libqalculate ranger pkgfile
 
 sudo pacman -S tor
 sudo systemctl enable --now tor
@@ -34,41 +35,22 @@ git clone --depth 1 https://github.com/wbthomason/packer.nvim\
     ~/.local/share/nvim/site/pack/packer/start/packer.nvim 
 sudo npm i -g pyright
 
-# Install lua-language-server
-cd ~/bin
-git clone --depth=1 https://hub.fastgit.xyz/sumneko/lua-language-server
-
-cd lua-language-server
-git submodule update --init --recursive
-
-cd 3rd/luamake
-chmod +x compile/install.sh && bash !$
-cd ../../
-./3rd/luamake/luamake rebuild
-cd
-
-# nnn file manager
-cd ~/bin
-git clone https://github.com/jarun/nnn
-cd nnn
-make O_NERD=1 O_EMOJI=1
-cd
-
 # Install paru
-git clone https://aur.archlinux.org/paru.git 
+git clone https://aur.archlinux.org/paru.git
 cd paru
 makepkg -si 
 cd 
 rm -rf paru
+
+# MTP protocol
+sudo pacman -S mtpfs gvfs-mtp gvfs-gphoto2
+paru -S jmtpfs
 
 # Virtual Machine tool
 sudo pacman -S qemu virt-manager ebtables dnsmasq firewalld nmap  
 sudo systemctl --now enable libvirtd
 sudo systemctl --now enable firewalld
 sudo sytemctl restart libvirtd
-
-sudo pacman -S mtpfs gvfs-mtp gvfs-gphoto2
-paru -S jmtpfs
 
 paru -S librewolf-bin timeshift-bin kotatogram-desktop-bin 
 paru -S polybar-git light-git picom-tryone-git betterlockscreen

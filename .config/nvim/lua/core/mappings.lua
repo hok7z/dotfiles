@@ -2,7 +2,7 @@ local map = vim.keymap.set
 
 map("n","<space>,",":nohlsearch<CR>")
 map("n","<leader>m",":MarkdownPreview<CR>")
-map("n","<leader>c",function() require("core.colorpicker") end)
+
 -- Black arrows
 vim.api.nvim_set_keymap('', '<up>', '<nop>',   { noremap = true })
 vim.api.nvim_set_keymap('', '<down>', '<nop>', { noremap = true })

@@ -33,12 +33,13 @@ super + g
 # Start programs
 # --------------------------------------------------------
 
-
-
 super + Return
-	alacritty
-
-alt + e
+    kitty
+super + shift + t
+    kotatogram-desktop
+super + shift + b
+    librewolf 
+super + c
     rofi -show calc -modi calc -no-show-match -no-sort
 
 super + alt + l

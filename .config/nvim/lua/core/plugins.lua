@@ -4,7 +4,6 @@ if not ok then
     return
 end
 
-
 vim.api.nvim_create_autocmd("BufWritePost", {
     pattern = "*/core/plugins.lua",
     callback = function(arg)
@@ -16,32 +15,31 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 packer.startup{
     function(use)
         use "wbthomason/packer.nvim"
-
+        
+        use "marko-cerovac/material.nvim"
         use "folke/tokyonight.nvim"
-        use "navarasu/onedark.nvim"
 
         use "nathom/filetype.nvim"
         use "dstein64/vim-startuptime"
 
         use {
+            "nacro90/numb.nvim",
+            config = function() require('numb').setup() end
+        }
+
+        use {
             "max397574/better-escape.nvim",
-            config = function()
-                require("better_escape").setup()
-            end
+            config = function() require("better_escape").setup() end
         }
 
         use {
             "numToStr/Comment.nvim",
-            config = function()
-                require('Comment').setup()
-            end
+            config = function() require('Comment').setup() end
         }
 
         use {
             "windwp/nvim-autopairs",
-            config = function()
-                require("nvim-autopairs").setup()
-            end
+            config = function() require("nvim-autopairs").setup() end
         }
 
         use {
@@ -49,7 +47,7 @@ packer.startup{
             config = function()
                 require"surround".setup{mappings_style = "sandwich"}
             end
-        }
+        } 
 
         use {
             "lukas-reineke/indent-blankline.nvim",
@@ -60,23 +58,14 @@ packer.startup{
                 }
             end
         }
-
-        use {
-            "RRethy/vim-illuminate"
-        }
+ 
 
         use {
             "lewis6991/gitsigns.nvim",
             config = function()
-                require("gitsigns").setup{
-                    keymaps = {}
-                }
+                require("gitsigns").setup{keymaps = {}}
             end
-        }
-
-        use {
-            "f-person/git-blame.nvim"
-        }
+        } 
 
         use {
             "kyazdani42/nvim-tree.lua",
@@ -84,9 +73,8 @@ packer.startup{
             config = function() require("plugins.nvim-tree") end
         }
 
-        use {
-            "davidgranstrom/nvim-markdown-preview"
-        }
+        use "davidgranstrom/nvim-markdown-preview"
+        use "chrisbra/Colorizer"  
 
         use {
             "folke/todo-comments.nvim",
@@ -119,7 +107,8 @@ packer.startup{
         use {
             "rcarriga/nvim-notify",
             config = function()
-                require("notify").setup{
+                local notify = require("notify")
+                notify.setup{
                     level = "info",
                     stages = "fade_in_slide_out",
 
@@ -136,13 +125,7 @@ packer.startup{
 
                     minimum_width = 50,
 
-                    icons = {
-                        ERROR = "",
-                        WARN = "",
-                        INFO = "",
-                        DEBUG = "",
-                        TRACE = "✎",
-                    },
+                    icons = vim.g.icons.notify,
                 }
 
             end
@@ -175,28 +158,28 @@ packer.startup{
         -- Language Server Protocol
         use {
            "neovim/nvim-lspconfig",
+           requires = {"williamboman/nvim-lsp-installer"},
            config = function() require("plugins.lsp") end
-        }
-
-        use {
-            "williamboman/nvim-lsp-installer"
         }
 
         use {
             "ray-x/lsp_signature.nvim",
             config = function()
-                local cfg = {
+                local lsp_signature = require("lsp_signature")
+                
+                lsp_signature.setup{
                     hint_enable = false,
                     verbose = true
                 }
-                require"lsp_signature".setup(cfg)
+
             end
         }
 
         use {
             "onsails/lspkind-nvim",
             config = function()
-                require("lspkind").init{
+                local lspkind = require("lspkind")
+                lspkind.init{
                     mode = 'symbol_text',
                     preset = 'codicons'
                 }
@@ -242,13 +225,8 @@ packer.startup{
             config = function() require("plugins.dap") end,
         }
 
-        use {
-            "rcarriga/nvim-dap-ui"
-        }
-
-
+        use "rcarriga/nvim-dap-ui"
     end,
-
     config = {
         display = {
             open_fn = function()

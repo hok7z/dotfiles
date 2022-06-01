@@ -4,30 +4,24 @@ if not ok then
     return
 end
 
-local utils = require "core.utils"
-local root_pattern = require "lspconfig.util".root_pattern
+local utils = require"core.utils"
+local root_pattern = require"lspconfig.util".root_pattern
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 local lsp_servers = "/home/" .. vim.fn.expand("$USER") .. "/.local/share/nvim/lsp_servers/"
 
 local handlers =  {
-    ["textDocument/hover"]         =  vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"}),
-    ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help, {border = "rounded" }),
+    ["textDocument/hover"]         =  vim.lsp.with(vim.lsp.handlers.hover,{border = "rounded"}),
+    ["textDocument/signatureHelp"] =  vim.lsp.with(vim.lsp.handlers.signature_help,{border = "rounded"}),
 }
-local capabilities = vim.lsp.protocol.make_client_capabilities()
 
 vim.diagnostic.config{
     signs = true,
-
-    virtual_text = {
-        prefix = 'x'
-    },
-
-    float =  {
-        border = "rounded"
-    },
-
     underline = true,
     update_in_insert = false,
     severity_sort = false,
+
+    virtual_text = {prefix = 'x'},
+    float = {border = "rounded"},
 }
 
 local function DiagnosticSign(name,icon,color)
@@ -35,14 +29,7 @@ local function DiagnosticSign(name,icon,color)
     utils.highlight{"Diagnostic"..name,fg=color}
 end
 
-local diagnostic_signs = {
-    {name = "Error",icon = " ", color = "Red"      },
-    {name = "Warn", icon = " ", color = "Yellow"   },
-    {name = "Info", icon = " ", color = "Yellow"   },
-    {name = "Hint", icon = " ", color = "LightBlue"}
-}
-
-for _,sign in ipairs(diagnostic_signs) do
+for _,sign in pairs(vim.g.icons.diagnostics) do
     DiagnosticSign(sign.name,sign.icon,sign.color)
 end
 
@@ -80,14 +67,11 @@ nvim_lsp.clangd.setup {
 nvim_lsp.pyright.setup{
     on_attach = on_attach,
     handlers = handlers,
-    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities),
-    flags = {
-        debounce_text_changes = 150,
-    }
+    capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities), 
 }
 
 nvim_lsp.gopls.setup {
-    cmd = { lsp_servers .. "go/gopls","serve" },
+    cmd = { lsp_servers .. "go/gopls","server" },
     filetypes = {"go", "gomod"},
     on_attach = on_attach,
     handlers = handlers,
@@ -96,39 +80,5 @@ nvim_lsp.gopls.setup {
         "go.mod",
         ".git",
         vim.fn.getcwd(),
-    },
-}
-
--- FIX: slowly load sumneko
-local sumneko_binary = vim.fn.exepath('lua-language-server')
-local sumneko_root_path = vim.fn.fnamemodify(sumneko_binary, ':h')
-
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, "lua/?.lua")
-table.insert(runtime_path, "lua/?/init.lua")
-
-nvim_lsp.sumneko_lua.setup{
-    cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"},
-    filetype = {"lua"},
-    capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities),
-    handlers = handlers,
-
-    settings = {
-        Lua = {
-            runtime = {
-                version = "LuaJIT",
-                path = runtime_path,
-            },
-            diagnostics = {
-                globals = {'vim'}
-            },
-            workspace = {
-                library = vim.api.nvim_get_runtime_file("",true),
-            },
-            telemetry = {
-                enable = false,
-            },
-        },
-
     },
 }
