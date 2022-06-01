@@ -3,12 +3,13 @@
 # Events
 # ---------------------------------------------------------------------
 nitrogen --restore & 
+light -S 70
 picom --experimental-backends &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 $HOME/.config/polybar/launch.sh &
+deadd-notification-center &
 setxkbmap -model pc104 -layout us,ru -variant ,, -option grp:alt_shift_toggle &
 # ---------------------------------------------------------------------
-bspc rule -a mpv state=floating sticky=on
 
 pgrep -x sxhkd > /dev/null || sxhkd &
 bspc monitor -d I II III IV V VI VII   
@@ -18,10 +19,9 @@ bspc monitor -d I II III IV V VI VII
 bspc config single_monocle true
 bspc config gapless_monocle true
 
-
 # Gaps 
-bspc config border_width         3 
-bspc config window_gap           5
+bspc config border_width         2 
+bspc config window_gap           8
 
 
 # Set color border
@@ -37,4 +37,4 @@ bspc config gapless_monocle      true
 # Rulls open window 
 bspc rule -a LibreWolf          desktop='^1'
 bspc rule -a KotatogramDesktop  desktop='^2'
-bspc rule -a SublimeText       state=floating 
+bspc rule -a mpv state=floating sticky=on
